@@ -1,14 +1,10 @@
 <?php
-// Conexão com o banco
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fabricadecampeoes";
-$port = '3306';
+require_once 'db_config.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
+$conn = new mysqli(DB_SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
+
 if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
 // Dados do formulário

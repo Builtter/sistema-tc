@@ -1,14 +1,10 @@
 <?php
-$host = 'localhost';
-$user = 'root';
-$password = ''; 
-$database = 'fabricadecampeoes';
-$port = '3306';
+require_once 'db_config.php';
 
-$conn = new mysqli($host, $user, $password, $database, $port);
+$conn = new mysqli(DB_SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
 
 if ($conn->connect_error) {
-  die("Conexão falhou: " . $conn->connect_error);
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
 $selectProdutos = "SELECT * FROM produto";

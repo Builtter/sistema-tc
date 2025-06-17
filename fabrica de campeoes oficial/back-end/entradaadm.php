@@ -1,13 +1,11 @@
 <?php
 class entradaadm{
-    private $host = 'localhost';
-    private $user = 'root';
-    private $password = ''; 
-    private $database = 'fabricadecampeoes';
-    private $port = '3306';
-
     public function connection(){
-        $connection = mysqli_connect($this->host, $this->user, $this->password, $this->database, $this->port);
+        require_once 'db_config.php';
+        $connection = new mysqli(DB_SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
+        if ($connection->connect_error) {
+            die("Erro de conexão: " . $connection->connect_error);
+        }
         mysqli_set_charset($connection, 'utf8');
         return $connection;
     }
