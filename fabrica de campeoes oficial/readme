@@ -6,6 +6,8 @@
 #composer - Download
 # Rodar no diretório com composer.json para download dos pacotes
 #https://getcomposer.org/download/
+# excluir pasta vendor + composer.lock (caso existam)
+# comando no diretório composer.json -> composer up
 
 #Email: fabricadecampeoestcc@gmail.com
 #Senha: fabricatcc1
