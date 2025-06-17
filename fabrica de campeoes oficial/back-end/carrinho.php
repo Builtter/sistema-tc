@@ -34,7 +34,7 @@ function cadastrarPedidoCarrinho($conn, $itens) {
     }
 
     $notaCompra = ($itens['rating'] == null) ? 0 : $itens['rating'];
-
+    global $quantidadeAtual;
     foreach ($itens['itens'] as $item) {
         $idEstoque = $item['id'];
         $descricao = $item['nome'];
@@ -44,6 +44,22 @@ function cadastrarPedidoCarrinho($conn, $itens) {
         $stmt = $conn->prepare("INSERT INTO pedido (idCliente, descricao, quantidade, dtPedido, idEstoque, vlCompra, avaliaCompra, protCompra) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("isisisis", $idCliente, $descricao, $quantidade, $dtHoraPedido, $idEstoque, $vlCompra, $notaCompra, $protCompra);
         $stmt->execute();
+
+        // Consultar quantidade atual do produto
+        $sqlConsultaQtd = "SELECT quantidade FROM produto WHERE idProduto = ?";
+        $stmt = $conn->prepare($sqlConsultaQtd);
+        $stmt->bind_param("i", $idEstoque);
+        $stmt->execute();
+        $stmt->bind_result($quantidadeAtual);
+        $stmt->fetch();
+        $stmt->close();
+
+        // Atualizar quantidade do produto
+        $novaQuantidade = $quantidadeAtual - $quantidade;
+        $sqlUpdate = "UPDATE produto SET quantidade = ? WHERE idProduto = ?";
+        $stmtUpdate = $conn->prepare($sqlUpdate);
+        $stmtUpdate->bind_param("ii", $novaQuantidade, $idEstoque);
+        $stmtUpdate->execute();
     }
 
     http_response_code(200);

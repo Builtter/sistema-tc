@@ -24,6 +24,7 @@ $novaQuantidade = $quantidadeAtual + $quantidade;
 $sqlUpdate = "UPDATE produto SET quantidade = ? WHERE idProduto = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
 $stmtUpdate->bind_param("ii", $novaQuantidade, $id);
+$stmtUpdate->execute();
 
 if ($stmtUpdate->execute()) {
   echo "<script>alert('Estoque atualizado com sucesso.'); window.location.href = '../front-end/estoque.html';</script>";
