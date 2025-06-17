@@ -12,12 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  let index = 0;
-  const banner = document.querySelector(".banner img");
-  setInterval(() => {
-    index = (index + 1) % imagens.length;
-    banner.src = imagens[index];
-  }, 4000);
+    // let index = 0;
+    // const banner = document.querySelector(".banner img");
+    // setInterval(() => {
+    //   index = (index + 1) % imagens.length;
+    //   banner.src = imagens[index];
+    // }, 4000);
 
   // Botão de modo escuro
   const botaoModo = document.getElementById("modo-escuro-toggle");
