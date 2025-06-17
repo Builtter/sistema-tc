@@ -11,7 +11,13 @@
   <title>Painel da Proprietária | Gestão</title>
   <script>
   document.addEventListener("DOMContentLoaded", () => {
-    fetch('../back-end/gestao.php')
+    fetch('../back-end/gestao.php', {
+      headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+    })
+    
       .then(response => response.json())
         .then(data => {
         console.log('Dados recebidos:', data);
