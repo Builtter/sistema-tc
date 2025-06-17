@@ -25,9 +25,11 @@
           if (data.podeAcessar) {
             document.getElementById('sair').style.display = 'block';
             document.getElementById('login').style.display = 'none';
+            document.getElementById('cadastro').style.display = 'none';
           } else {
             document.getElementById('sair').style.display = 'none';
             document.getElementById('login').style.display = 'block';
+            document.getElementById('cadastro').style.display = 'block';
           }
         })
         .catch(error => {
@@ -79,7 +81,7 @@
       <!-- <a href="loja.html"><i class="bx bx-home"></i> Início</a> -->
       <a href="gestao_login.html"><i class="bx bx-user-circle"></i> Gestão</a>
       <a href="carrinho.html"><i class="bx bx-cart"></i> Carrinho</a>
-      <a href="cadastro.html"><i class="bx bx-user-plus"></i> Cadastro</a>
+      <a href="cadastro.html" id="cadastro"><i class="bx bx-user-plus"></i> Cadastro</a>
       <a href="login.html" id="login"><i class="bx bx-log-in"></i> Login</a>
       <a href="login.html" id="sair"><i class="bx bx-log-out"></i> Sair</a>
     </nav>
