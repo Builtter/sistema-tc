@@ -29,6 +29,13 @@ $produtosEmEstoque = $result->fetch_assoc();
 $result = $conn->query("SELECT FORMAT(AVG(avaliaCompra), 1) AS media FROM pedido");
 $mediaAvaliacao = $result->fetch_assoc();
 
+// Alerta estoque
+$estoqueBaixo = 0;
+$result = $conn->query("SELECT COUNT(*) AS qtNegativo FROM produto where quantidade < 50");
+if ($result->num_rows > 0) {
+    $estoqueBaixo = $result->fetch_assoc()['qtNegativo'];
+}
+
 //ultimos pedidos
 $result = $conn->query("SELECT 
   p.protCompra,
@@ -71,6 +78,7 @@ echo json_encode(array(
     'faturamentoTotal' => $faturamentoTotal['total'],
     'produtosEmEstoque' => $produtosEmEstoque['total'],
     'mediaAvaliacao' => $mediaAvaliacao['media'],
+    'estoqueBaixo' => $estoqueBaixo,
     'ultimosPedidos' => $ultimosPedidos,
     'consultaGeral' => $consultaGeral
 ));

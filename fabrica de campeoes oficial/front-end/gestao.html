@@ -20,13 +20,18 @@
     
       .then(response => response.json())
         .then(data => {
-        console.log('Dados recebidos:', data);
+        // console.log('Dados recebidos:', data);
         // Atualiza cards de resumo
         document.getElementById('totalPedidos').textContent = data?.totalPedidos ?? '0';
         document.getElementById('totalClientes').textContent = data?.totalClientes ?? '0';
         document.getElementById('faturamentoTotal').textContent = 'R$ ' + parseFloat(data?.faturamentoTotal ?? 0).toFixed(2);
         document.getElementById('produtosEmEstoque').textContent = data?.produtosEmEstoque ?? '0';
         document.getElementById('mediaAvaliacao').textContent = (data?.mediaAvaliacao ?? '0') + ' ★';
+        
+        const alertaEstoqueBaixo = document.getElementById('alertaEstoqueBaixo');
+        const dataEstoqueBaixo = (data.estoqueBaixo) ? data.estoqueBaixo : 0;
+        alertaEstoqueBaixo.style.display = dataEstoqueBaixo == 0 ? 'none' : 'block';
+        document.getElementById('estoqueBaixo').textContent = dataEstoqueBaixo + ' ⚠️';
 
         // Preenche últimos pedidos
         const tbody = document.getElementById('ultimosPedidos');
@@ -146,6 +151,11 @@
         <div class="card">
           <h2>Avaliações Positivas</h2>
           <p id="mediaAvaliacao"></p>
+        </div>
+        <div id = "alertaEstoqueBaixo" class="card" style="background-color: rgb(201, 93, 93);">
+          <h2>Estoque Baixo</h2>
+          <p id="estoqueBaixo"></p>
+          <a href="../back-end/listar-estoque.php" target="_blank" style="text-decoration: none; color: inherit;">Consultar estoque</a>
         </div>
       </section>
 
