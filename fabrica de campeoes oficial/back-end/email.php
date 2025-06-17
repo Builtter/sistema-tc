@@ -49,11 +49,7 @@ try {
     // Envia o e-mail
     $mail->send();
 
-    if ($mail->send()) {
-        $ok = true;
-    } else {
-        $ok = false;
-    }
+    echo 'Message has been sent';
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
