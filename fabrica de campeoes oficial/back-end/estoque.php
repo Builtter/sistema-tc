@@ -15,7 +15,7 @@ $preco = $_POST['preco'];
 $prodImg = $_FILES['imagem']['tmp_name'];
 $nomeArquivo = substr($_FILES['imagem']['name'], 0, strrpos($_FILES['imagem']['name'], '.'));
 $tamanho_permitido = 1024000; // 1 MB
-$pasta = '/front-end/imagens';
+$pasta = '/imagens';
 
 // Check if image is uploaded
 if (!empty($prodImg)) {
