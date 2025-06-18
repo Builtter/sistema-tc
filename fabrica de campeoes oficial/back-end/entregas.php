@@ -26,9 +26,11 @@ FROM
   LIMIT 25 ");
 $ultimosPedidos = $result->fetch_all(MYSQLI_ASSOC);
 
-echo json_encode(array(
-    'ultimosPedidos' => $ultimosPedidos,
-));
+$data = array(
+    'ultimosPedidos' => $ultimosPedidos
+);
+
+echo json_encode($data);
 
 //Encerra conexão
 $conn->close();

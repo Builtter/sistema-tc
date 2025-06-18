@@ -69,10 +69,7 @@ ORDER BY
   dataPedido");
 $consultaGeral = $result->fetch_all(MYSQLI_ASSOC);
 
-//Encerra conexão
-$conn->close();
-
-echo json_encode(array(
+$data = array(
     'totalPedidos' => $totalPedidos['total'],
     'totalClientes' => $totalClientes['total'],
     'faturamentoTotal' => $faturamentoTotal['total'],
@@ -81,5 +78,9 @@ echo json_encode(array(
     'estoqueBaixo' => $estoqueBaixo,
     'ultimosPedidos' => $ultimosPedidos,
     'consultaGeral' => $consultaGeral
-));
+);
 
+echo json_encode($data);
+
+//Encerra conexão
+$conn->close();
