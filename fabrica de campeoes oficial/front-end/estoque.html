@@ -11,11 +11,12 @@
 <body>
   <p><a href="../front-end/gestao.html">Dashboard</a></p>
   <h1>Cadastro de Produto</h1>
-  <form action="../back-end/estoque.php" method="post">
+  <form action="../back-end/estoque.php" method="post" enctype="multipart/form-data">
     <label>Nome do Produto: <input type="text" name="nome" required></label><br>
     <label>Descrição: <textarea name="descricao" required></textarea></label><br>
     <label>Quantidade: <input type="number" name="quantidade" required></label><br>
     <label>Preço (R$): <input type="number" step="0.01" name="preco" required></label><br>
+    <label>Imagem Produto: <input type="file" name="imagem" required></label><br>
     <button type="submit">Cadastrar Produto</button>
   </form>
 

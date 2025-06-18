@@ -12,10 +12,41 @@ $descricao = $_POST['descricao'];
 $quantidade = $_POST['quantidade'];
 $preco = $_POST['preco'];
 
-$sql = "INSERT INTO produto (nome, descricao, quantidade, preco) VALUES (?, ?, ?, ?)";
+$prodImg = $_FILES['imagem']['tmp_name'];
+$nomeArquivo = substr($_FILES['imagem']['name'], 0, strrpos($_FILES['imagem']['name'], '.'));
+$tamanho_permitido = 1024000; // 1 MB
+$pasta = '/front-end/imagens';
+
+// Check if image is uploaded
+if (!empty($prodImg)) {
+    $file = getimagesize($prodImg);
+
+    // Check file size
+    if ($_FILES['imagem']['size'] > $tamanho_permitido) {
+        echo "erro - arquivo muito grande";
+        exit();
+    }
+
+    // Check file extension
+    var_dump(preg_match('/^imagem\/(?:jpg|jpeg|png)$/i', $file['mime']));
+    if (preg_match('/^imagem\/(?:jpg|jpeg|png)$/i', $file['mime'])) {
+        echo "erro - extensão não permitida";
+        exit();
+    }
+
+    // Get file extension
+    $extensao = str_ireplace("/", "", strchr($file['mime'], "/"));
+
+    // Create new destination path
+    $novoDestino = "{$pasta}/cad_prod_" . $nomeArquivo . '_' . uniqid('', true) . '.' . $extensao;
+    move_uploaded_file($prodImg, $novoDestino);
+} else {
+    $novoDestino = null;
+}
+
+$sql = "INSERT INTO produto (nome, descricao, quantidade, preco, imagem) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-//var_dump($conn,$stmt, $sql); // Debugging line to check if the statement is prepared correctly
-$stmt->bind_param("ssid", $nome, $descricao, $quantidade, $preco);
+$stmt->bind_param("ssids", $nome, $descricao, $quantidade, $preco, $novoDestino);
 
 if ($stmt->execute()) {
   echo "Produto cadastrado com sucesso.";
