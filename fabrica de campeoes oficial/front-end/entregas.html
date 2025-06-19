@@ -11,25 +11,38 @@
   <script>
     // Atualizar os dados do painel - Requisição AJAX
     document.addEventListener("DOMContentLoaded", () => {
-      fetch('../back-end/entregas.php')
-        .then(response => response.json())
+      fetch('../back-end/entregas.php', {
+        headers: {
+          'Content-Type': 'text/plain',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+      })
+        .then(response => response.text())
         .then(data => {
-          //Ultimos Pedidos
+          const lines = data.split('\n').filter(line => line);
+          const ultimosPedidos = lines.map(line => {
+            const [protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, status] = line.split(', ');
+            return { protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, status };
+          });
+
           const tbody = document.getElementById('ultimosPedidos');
-          data.ultimosPedidos.forEach(pedido => {
+          tbody.innerHTML = '';
+          ultimosPedidos.forEach(pedido => {
             const row = document.createElement('tr');
             row.innerHTML = `
-              <td>${pedido.protCompra}</td>
-              <td>${pedido.nomeCliente}</td>
-              <td>${pedido.telefone}</td>
-              <td>${pedido.nomeProduto}</td>
-              <td>${pedido.status}</td>
-              <td>${pedido.status === 'enviado' ? '<span><img class="icone-verificado" src="imagens/verificado.png"></span>' : `<button class="enviar" id="${pedido.protCompra}">Enviar</button>`}</td>
+            <td>${pedido.protCompra}</td>
+            <td>${pedido.nomeCliente}</td>
+            <td>${pedido.telefone}</td>
+            <td>${pedido.nomeProduto}</td>
+            <td id="statusPedido">${pedido.status.trim()}</td>
+            <td id="acaoPedido">${pedido.status.trim().replace(/<br \/>/g, '').toLowerCase() === 'aguardando' ? `<button class="enviar" id="${pedido.protCompra}">Enviar</button>` : `<span><img class="icone-verificado" src="imagens/verificado.png" alt="Verificado"></span>`}</td>
             `;
             tbody.appendChild(row);
           });
         })
-        .catch(error => console.error('Erro ao buscar dados: ', error));
+        .catch(error => {
+          console.error('Erro ao buscar dados: ', error);
+        });
     });
   </script>
 </head>
@@ -95,35 +108,61 @@
   });
 
   modalConfirmaEnvioSim.addEventListener('click', () => {
-      const protocolo = document.getElementById('protocolo-compra').textContent;
-      fetch('../back-end/enviar-entregas.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ protCompra: protocolo })
+    const protocolo = document.getElementById('protocolo-compra').textContent;
+    fetch('../back-end/enviar-entregas.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ protCompra: protocolo })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro ao confirmar entrega: ' + response.statusText);
+        }
+        return response.json();
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erro ao confirmar entrega: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.status === 'ok') {
-            alert('Pedido encaminhado!');
-            modalConfirmaEnvio.style.display = 'none';
-            location.reload();
-          } else if (data.status === 'sent') {
-            alert('Este pedido já foi enviado!');
-            modalConfirmaEnvio.style.display = 'none';
-            location.reload();
-          } else {
-            alert('Erro ao confirmar entrega: ' + data.mensagem);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao confirmar entrega: ', error);
-        });
-    });
+      .then(data => {
+        if (data.status === 'ok') {
+          alert('Pedido encaminhado!');
+          modalConfirmaEnvio.style.display = 'none';
+          location.reload();
+        } else if (data.status === 'sent') {
+          alert('Este pedido já foi enviado!');
+          modalConfirmaEnvio.style.display = 'none';
+          location.reload();
+        } else {
+          alert('Erro ao confirmar entrega: ' + data.mensagem);
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao confirmar entrega: ', error);
+      });
+  });
+
+  // function montarTabelaEntregas() {
+  //   const tbody = document.getElementById('ultimosPedidos');
+  //   const rows = tbody.getElementsByTagName('tr');
+
+  //   Array.from(rows).forEach(row => {
+  //     const statusCell = row.querySelector('td[id="statusPedido"]');
+  //     const status = statusCell.textContent.trim();
+
+  //     if (status === 'aguardando') {
+  //       const acaoCell = row.querySelector('td[id="acaoPedido"]');
+  //       const enviarButton = document.createElement('button');
+  //       enviarButton.classList.add('enviar');
+  //       enviarButton.id = row.querySelector('td:first-child').textContent;
+  //       enviarButton.textContent = 'Enviar';
+  //       acaoCell.appendChild(enviarButton);
+  //     } else if (status === 'enviado') {
+  //       const acaoCell = row.querySelector('td[id="acaoPedido"]');
+  //       const verificadoIcon = document.createElement('span');
+  //       verificadoIcon.innerHTML = `<img class="icone-verificado" src="imagens/verificado.png" alt="Verificado">`;
+  //       acaoCell.appendChild(verificadoIcon);
+  //     }
+  //   });
+  // }
+
+  // document.addEventListener("DOMContentLoaded", montarTabelaEntregas);
 </script>

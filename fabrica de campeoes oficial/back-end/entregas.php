@@ -24,13 +24,12 @@ FROM
   LEFT JOIN entrega as e ON p.protCompra = e.idPedido
   ORDER BY p.dtPedido DESC
   LIMIT 25 ");
-$ultimosPedidos = $result->fetch_all(MYSQLI_ASSOC);
+$ultimosPedidos = '';
+while($row = $result->fetch_assoc()) {
+    $ultimosPedidos .= implode(', ', $row) . "\n";
+}
 
-$data = array(
-    'ultimosPedidos' => $ultimosPedidos
-);
-
-echo json_encode($data);
+echo nl2br($ultimosPedidos);
 
 //Encerra conexão
 $conn->close();
