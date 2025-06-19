@@ -10,18 +10,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <title>Painel da Proprietária | Gestão</title>
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    fetch('../back-end/gestao.php', {
-      headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-    })
-    
+    document.addEventListener("DOMContentLoaded", () => {
+      //Dados Cards
+      fetch('../back-end/gestao.php', {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+      })
       .then(response => response.json())
         .then(data => {
-        // console.log('Dados recebidos:', data);
-        // Atualiza cards de resumo
         document.getElementById('totalPedidos').textContent = data?.totalPedidos ?? '0';
         document.getElementById('totalClientes').textContent = data?.totalClientes ?? '0';
         document.getElementById('faturamentoTotal').textContent = 'R$ ' + parseFloat(data?.faturamentoTotal ?? 0).toFixed(2);
@@ -32,26 +30,51 @@
         const dataEstoqueBaixo = (data.estoqueBaixo) ? data.estoqueBaixo : 0;
         alertaEstoqueBaixo.style.display = dataEstoqueBaixo == 0 ? 'none' : 'block';
         document.getElementById('estoqueBaixo').textContent = dataEstoqueBaixo + ' ⚠️';
+      }).catch(error => {
+        console.error('Erro ao buscar dados de Cards:', error);
+      });
 
-        // Preenche últimos pedidos
+      //Dados ultimos pedidos
+      fetch('../back-end/gestaoTabelaUltimosPedidos.php', {
+      headers: {
+        'Content-Type': 'text/plain',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      })
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.split('\n').filter(line => line);
+        const ultimosPedidos = lines.map(line => line.split(', '));
         const tbody = document.getElementById('ultimosPedidos');
-        tbody.innerHTML = ''; // Evita duplicação
-        data.ultimosPedidos?.forEach(pedido => {
+        tbody.innerHTML = '';
+        ultimosPedidos.forEach(pedido => {
           const row = document.createElement('tr');
           row.innerHTML = `
-            <td>${pedido.protCompra}</td>
-            <td>${pedido.nomeCliente}</td>
-            <td>${pedido.telefone}</td>
-            <td>${pedido.dataPedido}</td>
-            <td>${pedido.nomeProduto}</td>
-            <td>${pedido.descricaoProduto}</td>
+            <td>${pedido[0]}</td>
+            <td>${pedido[1]}</td>
+            <td>${pedido[2]}</td>
+            <td>${pedido[3]}</td>
+            <td>${pedido[4]}</td>
+            <td>${pedido[5]}</td>
           `;
           tbody.appendChild(row);
         });
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados de Ultimos Pedidos:', error);
+      });
 
+      //Dados dashboard
+      fetch('../back-end/gestaoDash.php', {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      })
+      .then(response => response.json())
+      .then(data => {
         // Gera gráfico com Chart.js (v2 ou v3+)
         const ctx = document.getElementById('myChart').getContext('2d');
-
         const labels = data.consultaGeral?.map(entry => entry.dataPedido) ?? [];
         const valores = data.consultaGeral?.map(entry => Number(entry.totalVendas)) ?? [];
 
@@ -109,8 +132,7 @@
         });
       })
       .catch(error => {
-        console.error('Erro ao buscar dados:', error);
-        <!-- alert('Erro ao carregar dados do dashboard. Verifique sua conexão ou tente mais tarde.'); -->
+        console.error('Erro ao buscar dados de Dash:', error);
       });
   });
 </script>
