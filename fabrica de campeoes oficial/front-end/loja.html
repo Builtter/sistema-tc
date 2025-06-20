@@ -73,6 +73,22 @@
         });
       }
     });
+
+    fetch('../back-end/lojaProdutos.php')
+      .then(response => response.json())
+      .then(data => {   
+        var produtosEmEstoque = data.produtosEmEstoque;        
+        if (produtosEmEstoque) {
+          produtosEmEstoque.forEach(item => {
+            var id = item.idProduto;
+            const produto = document.getElementById(id);
+            produto.style.display = 'none';
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao consultar estoque de produtos: ', error);
+      });
   </script>
 </head>
 <body>
@@ -89,63 +105,63 @@
     </nav>
   </header>
   <section class="produtos">
-    <div class="produto">
+    <div id="1" class="produto">
       <img src="imagens/etiqueta adesiva termica.png" alt="Etiqueta 1" width="150" />
       <h3>Etiqueta Adesiva Térmica</h3>
       <p>R$ 8,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="1" data-nome="Etiqueta Adesiva Térmica" data-preco="08.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="2" class="produto">
       <img src="imagens/etiqueta papel croche.png" alt="Etiqueta 2" width="150" />
       <h3>Etiqueta Papel Couchê</h3>
       <p>R$ 19,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="2" data-nome="Etiqueta Papel Couchê" data-preco="19.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="3" class="produto">
       <img src="imagens/etiqueta bopp.png" alt="Etiqueta 3" width="150" />
       <h3>Etiqueta BOPP Transparente</h3>
       <p>R$ 20,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="3" data-nome="Etiqueta BOPP Transparente" data-preco="20.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="4" class="produto">
       <img src="imagens/cartão visita.png" alt="Etiqueta 4" width="150" />
       <h3>cartão visita</h3>
       <p>R$ 11,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="4" data-nome="cartão visita" data-preco="11.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="5" class="produto">
       <img src="imagens/banner loja.png" alt="Etiqueta 5" width="150" />
       <h3>banner</h3>
       <p>R$ 59,99</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="5" data-nome="banner" data-preco="59.99">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="6" class="produto">
       <img src="imagens/logo time.png" alt="Etiqueta 6" width="150" />
       <h3>logo em geral</h3>
       <p>R$ 80,99</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="6" data-nome="logo time" data-preco="80.99">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="7" class="produto">
       <img src="imagens/cartão aniverssario.png" alt="Etiqueta 7" width="150" />
       <h3>cartão aniverssario</h3>
       <p>R$ 10,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="7" data-nome="cartão aniverssario" data-preco="10.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="8" class="produto">
       <img src="imagens/embalagem.png" alt="Etiqueta 7" width="150" />
       <h3>embalagem</h3>
       <p>R$ 37,90</p>
       <p>ou a combinar</p>
       <button class="add-carrinho" data-id="8" data-nome="embalagem" data-preco="37.90">Adicionar no carrinho</button>
     </div>
-    <div class="produto">
+    <div id="9" class="produto">
       <img src="imagens/convite de casamento.png" alt="Etiqueta 7" width="150" />
       <h3>convites para eventos</h3>
       <p>R$ 19,99</p>
