@@ -15,7 +15,7 @@ $preco = $_POST['preco'];
 $prodImg = $_FILES['imagem']['tmp_name'];
 $nomeArquivo = substr($_FILES['imagem']['name'], 0, strrpos($_FILES['imagem']['name'], '.'));
 $tamanho_permitido = 1024000; // 1 MB
-$pasta = '/imagens';
+$pasta = '../front-end/imagens/';
 
 // Check if image is uploaded
 if (!empty($prodImg)) {
@@ -28,8 +28,7 @@ if (!empty($prodImg)) {
     }
 
     // Check file extension
-    var_dump(preg_match('/^imagem\/(?:jpg|jpeg|png)$/i', $file['mime']));
-    if (preg_match('/^imagem\/(?:jpg|jpeg|png)$/i', $file['mime'])) {
+    if (!preg_match('/(jpg|jpeg|png)$/', $file['mime'])) {
         echo "erro - extensão não permitida";
         exit();
     }
@@ -38,8 +37,11 @@ if (!empty($prodImg)) {
     $extensao = str_ireplace("/", "", strchr($file['mime'], "/"));
 
     // Create new destination path
-    $novoDestino = "{$pasta}/cad_prod_" . $nomeArquivo . '_' . uniqid('', true) . '.' . $extensao;
-    move_uploaded_file($prodImg, $novoDestino);
+    $novoDestino = $pasta . "cad_prod_" . $nomeArquivo . '_' . uniqid('', true) . '.' . $extensao;
+    if (!move_uploaded_file($prodImg, $novoDestino)) {
+        echo "Erro ao salvar imagem";
+        exit();
+    }
 } else {
     $novoDestino = null;
 }
