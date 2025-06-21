@@ -21,8 +21,8 @@
         .then(data => {
           const lines = data.split('\n').filter(line => line);
           const ultimosPedidos = lines.map(line => {
-            const [protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, status] = line.split(', ');
-            return { protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, status };
+            const [protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status] = line.split(', ');
+            return { protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status };
           });
 
           const tbody = document.getElementById('ultimosPedidos');
@@ -35,6 +35,7 @@
             <td>${pedido.telefone}</td>
             <td>${pedido.nomeProduto}</td>
             <td id="statusPedido">${pedido.status.trim()}</td>
+            <td>${pedido.formaPagamento}</td>
             <td id="acaoPedido">${pedido.status.trim().replace(/<br \/>/g, '').toLowerCase() === 'aguardando' ? `<button class="enviar" id="${pedido.protCompra}">Enviar</button>` : `<span><img class="icone-verificado" src="imagens/verificado.png" alt="Verificado"></span>`}</td>
             `;
             tbody.appendChild(row);
@@ -71,6 +72,7 @@
               <th>Telefone</th>
               <th>Produto</th>
               <th>Estatus</th>
+              <th>Forma Pagamento</th>
               <th><img class="icone-entrega" src="imagens/entrega.png" alt="Entrega" /></th>
             </tr>
           </thead>
@@ -140,29 +142,4 @@
       });
   });
 
-  // function montarTabelaEntregas() {
-  //   const tbody = document.getElementById('ultimosPedidos');
-  //   const rows = tbody.getElementsByTagName('tr');
-
-  //   Array.from(rows).forEach(row => {
-  //     const statusCell = row.querySelector('td[id="statusPedido"]');
-  //     const status = statusCell.textContent.trim();
-
-  //     if (status === 'aguardando') {
-  //       const acaoCell = row.querySelector('td[id="acaoPedido"]');
-  //       const enviarButton = document.createElement('button');
-  //       enviarButton.classList.add('enviar');
-  //       enviarButton.id = row.querySelector('td:first-child').textContent;
-  //       enviarButton.textContent = 'Enviar';
-  //       acaoCell.appendChild(enviarButton);
-  //     } else if (status === 'enviado') {
-  //       const acaoCell = row.querySelector('td[id="acaoPedido"]');
-  //       const verificadoIcon = document.createElement('span');
-  //       verificadoIcon.innerHTML = `<img class="icone-verificado" src="imagens/verificado.png" alt="Verificado">`;
-  //       acaoCell.appendChild(verificadoIcon);
-  //     }
-  //   });
-  // }
-
-  // document.addEventListener("DOMContentLoaded", montarTabelaEntregas);
 </script>

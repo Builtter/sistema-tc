@@ -15,6 +15,7 @@ $result = $conn->query("SELECT
   p.dtPedido AS dataPedido,
   pr.nome AS nomeProduto,
   pr.descricao AS descricaoProduto,
+  COALESCE(p.tipoPagamento, ' - ') As formaPagamento,
   COALESCE(e.status, 'aguardando') AS status
 FROM 
   pedido as p
