@@ -30,6 +30,19 @@
           <button id="finalizar-compra">finalizar compra</button>
           <!-- Itens serão inseridos via JS -->
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 20px;">
+              <label for="form-pagamento">Forma de Pagamento:</label>
+              <select id="forma-pagamento">
+                <option value="dinheiro">Dinheiro</option>
+                <option value="pix">Pix</option>
+                <option value="credito">Crédito</option>
+                <option value="debito">Débito</option>
+              </select>
+            </td>
+          </tr>
+        </tfoot>
       </table>
       <h2 id="valor-total" style="margin-top: 20px;"></h2>
     </section>

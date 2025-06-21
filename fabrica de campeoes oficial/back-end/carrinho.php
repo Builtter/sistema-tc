@@ -34,15 +34,17 @@ function cadastrarPedidoCarrinho($conn, $itens) {
     }
 
     $notaCompra = ($itens['rating'] == null) ? 0 : $itens['rating'];
+    $formaPagamento = $itens['formaPagamento'];
     global $quantidadeAtual;
     foreach ($itens['itens'] as $item) {
+        // var_dump($item).die();
         $idEstoque = $item['id'];
         $descricao = $item['nome'];
         $quantidade = $item['quantidade'];
         $vlCompra = $item['total'];
 
-        $stmt = $conn->prepare("INSERT INTO pedido (idCliente, descricao, quantidade, dtPedido, idEstoque, vlCompra, avaliaCompra, protCompra) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isisisis", $idCliente, $descricao, $quantidade, $dtHoraPedido, $idEstoque, $vlCompra, $notaCompra, $protCompra);
+        $stmt = $conn->prepare("INSERT INTO pedido (idCliente, descricao, quantidade, dtPedido, idEstoque, vlCompra, avaliaCompra, protCompra, tipoPagamento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isisisiss", $idCliente, $descricao, $quantidade, $dtHoraPedido, $idEstoque, $vlCompra, $notaCompra, $protCompra, $formaPagamento);
         $stmt->execute();
 
         // Consultar quantidade atual do produto
@@ -65,5 +67,7 @@ function cadastrarPedidoCarrinho($conn, $itens) {
     http_response_code(200);
     echo $protCompra;
 }
+
+
 
 cadastrarPedidoCarrinho($conn, $itens);

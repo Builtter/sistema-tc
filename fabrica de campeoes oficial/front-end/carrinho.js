@@ -63,15 +63,18 @@ window.addEventListener('click', (event) => {
 avaliacaoForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const rating = document.querySelector('input[name="rating"]:checked')?.value;
+  const formaPagamento = document.getElementById('forma-pagamento').value;
+  
   if (rating) {
     alert(`Obrigado por avaliar!`);
-    finalizarCompra(rating);
+    finalizarCompra(rating, formaPagamento);
   } else {
     alert('Por favor, selecione uma nota.');
   }
 });
 
-function finalizarCompra(rating = null) {
+function finalizarCompra(rating = null, formaPagamento = null) {
+
   modalContainer.style.display = 'none';
 
   const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
@@ -88,7 +91,7 @@ function finalizarCompra(rating = null) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ itens, rating })
+    body: JSON.stringify({ itens, rating, formaPagamento })
   })
     .then(response => {
       if (response.ok) {
