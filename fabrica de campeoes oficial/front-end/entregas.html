@@ -21,8 +21,8 @@
         .then(data => {
           const lines = data.split('\n').filter(line => line);
           const ultimosPedidos = lines.map(line => {
-            const [protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status] = line.split(', ');
-            return { protCompra, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status };
+            const [protCompra, idCliente, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status] = line.split(', ');
+            return { protCompra, idCliente, nomeCliente, telefone, dataPedido, nomeProduto, descricaoProduto, formaPagamento, status };
           });
 
           const tbody = document.getElementById('ultimosPedidos');
@@ -31,7 +31,7 @@
             const row = document.createElement('tr');
             row.innerHTML = `
             <td>${pedido.protCompra}</td>
-            <td>${pedido.nomeCliente}</td>
+            <td cliente-id="${pedido.idCliente}">${pedido.nomeCliente}</td>
             <td>${pedido.telefone}</td>
             <td>${pedido.nomeProduto}</td>
             <td id="statusPedido">${pedido.status.trim()}</td>
@@ -110,13 +110,14 @@
   });
 
   modalConfirmaEnvioSim.addEventListener('click', () => {
+    const idCliente = document.querySelector('td[cliente-id]').getAttribute('cliente-id');
     const protocolo = document.getElementById('protocolo-compra').textContent;
     fetch('../back-end/enviar-entregas.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ protCompra: protocolo })
+      body: JSON.stringify({ protCompra: protocolo, idCliente: idCliente })
     })
       .then(response => {
         if (!response.ok) {

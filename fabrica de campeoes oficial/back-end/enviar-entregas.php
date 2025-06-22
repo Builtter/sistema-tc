@@ -11,16 +11,21 @@ if ($conn->connect_error) {
 
 $json = json_decode(file_get_contents('php://input'), true);
 $protCompra = $json['protCompra'];
+$idCliente = $json['idCliente'];
 
-function enviarEntrega($conn, $protCompra){
+function enviarEntrega($conn, $protCompra, $idCliente){
     //insert entrega
-    if(isset($protCompra)){
+    if(isset($protCompra, $idCliente)){
+        $resEndereco = $conn->query("SELECT idEndereco FROM endereco WHERE idCliente = '$idCliente' LIMIT 1");
+        $endereco = $resEndereco->fetch_assoc();
+        $idEndereco = $endereco['idEndereco'];
+
         $result = $conn->query("SELECT * FROM entrega WHERE idPedido = '$protCompra'");
         if($result->num_rows == 0){
             $status = 'enviado';
             $dataPrevisao = date('Y-m-d', strtotime('+20 days'));
-            $stmt = $conn->prepare("INSERT INTO entrega (status, dataPrevisao, idPedido) VALUES (?,?,?)");
-            $stmt->bind_param("sss", $status, $dataPrevisao, $protCompra);
+            $stmt = $conn->prepare("INSERT INTO entrega (status, dataPrevisao, idPedido, idEndereco) VALUES (?,?,?,?)");
+            $stmt->bind_param("sssi", $status, $dataPrevisao, $protCompra, $idEndereco);
             $stmt->execute();
 
             $retorno = array('status' => 'ok', 'mensagem' => "Produto enviado.");
@@ -38,4 +43,4 @@ function enviarEntrega($conn, $protCompra){
     }
 }
 
-enviarEntrega($conn, $protCompra);
+enviarEntrega($conn, $protCompra, $idCliente);

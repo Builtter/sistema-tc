@@ -10,6 +10,7 @@ if ($conn->connect_error) {
 //ultimos pedidos
 $result = $conn->query("SELECT 
   p.protCompra,
+  c.idCliente,
   c.nome AS nomeCliente,
   t.numero AS telefone,
   p.dtPedido AS dataPedido,
