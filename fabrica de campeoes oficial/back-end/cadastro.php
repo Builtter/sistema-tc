@@ -27,28 +27,29 @@ if ($stmt->execute()) {
     $idCliente = $stmt->insert_id;
 
     // Email
-    $stmtEmail = $conn->prepare("INSERT INTO email (email, idCliente) VALUES (?, ?)");
-    $stmtEmail->bind_param("si", $email, $idCliente);
+    $dtTemp = 0;
+    $stmtEmail = $conn->prepare("INSERT INTO email (email, idCliente, cliente_idCliente) VALUES (?, ?, ?)");
+    $stmtEmail->bind_param("sii", $email, $idCliente, $dtTemp);
     $stmtEmail->execute();
 
     // Telefone
-    $stmtTel = $conn->prepare("INSERT INTO telefone (numero, idCliente) VALUES (?, ?)");
-    $stmtTel->bind_param("si", $telefone, $idCliente);
+    $stmtTel = $conn->prepare("INSERT INTO telefone (numero, idCliente, cliente_idCliente) VALUES (?, ?, ?)");
+    $stmtTel->bind_param("sii", $telefone, $idCliente, $dtTemp);
     $stmtTel->execute();
 
     // Endereço 
-    $stmtEnd = $conn->prepare("INSERT INTO endereco (logradouro, complemento, idCliente, idCidade) VALUES (?, '', ?, 1)");
-    $stmtEnd->bind_param("si", $endereco, $idCliente);
+    $stmtEnd = $conn->prepare("INSERT INTO endereco (logradouro, complemento, idCliente, idCidade, cliente_idCliente) VALUES (?, '', ?, 1,?)");
+    $stmtEnd->bind_param("sii", $endereco, $idCliente, $dtTemp);
     $stmtEnd->execute();
 
     // estado
-    $stmtEstado = $conn->prepare("INSERT INTO estado (UF, descricao) VALUES (?, ?)");
-    $stmtEstado->bind_param("ss", $uf, $uf);
+    $stmtEstado = $conn->prepare("INSERT INTO estado (UF, descricao, cidade_idCidade, cidade_endereco_idEndereco) VALUES (?, ?,?,?)");
+    $stmtEstado->bind_param("ssii", $uf, $uf, $dtTemp, $dtTemp);
     $stmtEstado->execute();
     
     // Usuario
-    $stmtUsuario = $conn->prepare("INSERT INTO usuario (idCliente, senha) VALUES (?, ?)");
-    $stmtUsuario->bind_param("is", $idCliente, $senha);
+    $stmtUsuario = $conn->prepare("INSERT INTO usuario (idCliente, senha, cliente_idCliente) VALUES (?, ?, ?)");
+    $stmtUsuario->bind_param("isi", $idCliente, $senha, $dtTemp);
     $stmtUsuario->execute();
 
     
