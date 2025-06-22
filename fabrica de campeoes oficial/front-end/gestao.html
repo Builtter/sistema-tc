@@ -134,6 +134,21 @@
       .catch(error => {
         console.error('Erro ao buscar dados de Dash:', error);
       });
+
+      //Dados pedidoProduto
+      fetch('../back-end/atualizaPedidoProduto.php', {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Erro ao ao atualizar pedidoProduto:', error);
+      });
   });
 </script>
 
